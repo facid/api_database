@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS Organization (
 CREATE TABLE IF NOT EXISTS Office (
     id         INTEGER PRIMARY KEY AUTO_INCREMENT,
     org_id     INTEGER NOT NULL,
-    name       VARCHAR(10) UNIQUE NOT NULL,
+    name       VARCHAR(50) UNIQUE NOT NULL,
     phone      VARCHAR(50) UNIQUE,
     address    VARCHAR(50) NOT NULL,
     is_active  BOOLEAN
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Employee (
     office_id        INTEGER NOT NULL,
     first_name       VARCHAR(50) NOT NULL,
     second_name      VARCHAR(50),
-    last_name        VARCHAR(50) NOT NULL,
+    last_name        VARCHAR(50),
     position         VARCHAR(50) NOT NULL,
     phone            VARCHAR(50) UNIQUE,
     doc_code         VARCHAR(50),
@@ -33,13 +33,13 @@ CREATE TABLE IF NOT EXISTS Employee (
     is_identified    BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS Document (
+CREATE TABLE IF NOT EXISTS DocumentType (
     id     INTEGER PRIMARY KEY AUTO_INCREMENT,
     name   VARCHAR(100),
     code   VARCHAR(50)
 );
 
-CREATE TABLE IF NOT EXISTS Citizenship (
+CREATE TABLE IF NOT EXISTS Country (
     id     INTEGER PRIMARY KEY AUTO_INCREMENT,
     name   VARCHAR(50),
     code   INTEGER
@@ -47,7 +47,6 @@ CREATE TABLE IF NOT EXISTS Citizenship (
 
 CREATE INDEX UX_Organization_Full_Name ON Organization (full_name);
 CREATE INDEX UX_Organization_INN ON Organization (inn);
-CREATE INDEX UX_Organization_KPP ON Organization (kpp);
 CREATE INDEX IX_Organization_Is_Active ON Organization (is_active);
 
 CREATE INDEX UX_Office_Name ON Office (name);
@@ -66,7 +65,7 @@ CREATE INDEX IX_Employee_Office_Id ON Employee (office_id);
 ALTER TABLE Employee ADD FOREIGN KEY (office_id) REFERENCES Office (id);
 
 CREATE INDEX IX_Employee_Doc_Code ON Document (code);
-ALTER TABLE Employee ADD FOREIGN KEY (doc_code) REFERENCES Document (code);
+ALTER TABLE Employee ADD FOREIGN KEY (doc_code) REFERENCES DocumentType (code);
 
 CREATE INDEX IX_Employee_Citizenship_Code ON Employee (citizenship_code);
-ALTER TABLE Employee ADD FOREIGN KEY (citizenship_code) REFERENCES Citizenship (code);
+ALTER TABLE Employee ADD FOREIGN KEY (citizenship_code) REFERENCES Country (code);
