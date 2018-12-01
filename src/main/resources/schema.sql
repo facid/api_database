@@ -64,8 +64,8 @@ ALTER TABLE Office ADD FOREIGN KEY (org_id) REFERENCES Organization (id);
 CREATE INDEX IX_Employee_Office_Id ON Employee (office_id);
 ALTER TABLE Employee ADD FOREIGN KEY (office_id) REFERENCES Office (id);
 
-CREATE INDEX IX_Employee_Doc_Code ON DocumentType (code);
-ALTER TABLE Employee ADD FOREIGN KEY (doc_code) REFERENCES DocumentType (code);
+CREATE INDEX IX_Employee_Doc_Code ON Document_Type (code);
+ALTER TABLE Employee ADD FOREIGN KEY (doc_code) REFERENCES Document_Type (code);
 
 CREATE INDEX IX_Employee_Citizenship_Code ON Employee (citizenship_code);
 ALTER TABLE Employee ADD FOREIGN KEY (citizenship_code) REFERENCES Country (code);
