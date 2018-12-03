@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS Organization (
-    id          INTEGER  PRIMARY KEY AUTO_INCREMENT,
+    id          INTEGER PRIMARY KEY AUTO_INCREMENT,
+    version     INTEGER NOT NULL,
     name        VARCHAR(10) NOT NULL,
     full_name   VARCHAR(50) UNIQUE NOT NULL,
     address     VARCHAR(50) NOT NULL,
@@ -11,6 +12,7 @@ CREATE TABLE IF NOT EXISTS Organization (
 
 CREATE TABLE IF NOT EXISTS Office (
     id         INTEGER PRIMARY KEY AUTO_INCREMENT,
+    version    INTEGER NOT NULL,
     org_id     INTEGER NOT NULL,
     name       VARCHAR(50) UNIQUE NOT NULL,
     phone      VARCHAR(15) UNIQUE,
@@ -20,6 +22,7 @@ CREATE TABLE IF NOT EXISTS Office (
 
 CREATE TABLE IF NOT EXISTS Employee (
     id               INTEGER PRIMARY KEY AUTO_INCREMENT,
+    version          INTEGER NOT NULL,
     office_id        INTEGER NOT NULL,
     doc_data_id      INTEGER NOT NULL,
     country_id       INTEGER NOT NULL,
@@ -33,6 +36,7 @@ CREATE TABLE IF NOT EXISTS Employee (
 
 CREATE TABLE IF NOT EXISTS Document_Type (
     id          INTEGER PRIMARY KEY AUTO_INCREMENT,
+    version     INTEGER NOT NULL,
     name        VARCHAR(50),
     code        VARCHAR(2)
 );
@@ -45,9 +49,10 @@ CREATE TABLE IF NOT EXISTS Document_Data(
 );
 
 CREATE TABLE IF NOT EXISTS Country (
-    id     INTEGER PRIMARY KEY AUTO_INCREMENT,
-    name   VARCHAR(50),
-    code   VARCHAR(3)
+    id        INTEGER PRIMARY KEY AUTO_INCREMENT,
+    version   INTEGER NOT NULL,
+    name      VARCHAR(50),
+    code      VARCHAR(3)
 );
 
 CREATE INDEX UX_Organization_Full_Name ON Organization (full_name);
