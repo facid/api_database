@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS Organization (
     id          INTEGER                      COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
     version     INTEGER NOT NULL             COMMENT 'Служебное поле hibernate',
-    name        VARCHAR(10) NOT NULL         COMMENT 'Имя',
-    full_name   VARCHAR(50) UNIQUE NOT NULL  COMMENT 'Полное имя',
+    name        VARCHAR(10) NOT NULL         COMMENT 'Название',
+    full_name   VARCHAR(50) UNIQUE NOT NULL  COMMENT 'Полное название',
     address     VARCHAR(50) NOT NULL         COMMENT 'Адрес',
     phone       VARCHAR(15) UNIQUE           COMMENT 'Телефон',
     inn         VARCHAR(10) UNIQUE NOT NULL  COMMENT 'ИНН',
