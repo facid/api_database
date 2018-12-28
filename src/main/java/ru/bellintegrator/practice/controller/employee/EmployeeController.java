@@ -59,7 +59,7 @@ public class EmployeeController {
     }
 
     /**
-     * Обновить данные работника
+     * Сохранить данные работника
      *
      * @param employee
      */
