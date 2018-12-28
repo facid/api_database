@@ -13,6 +13,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 /**
  * Контроллер для управления информацией об организациях
  */
+
 @RestController
 @RequestMapping(value = "api/organization", produces = APPLICATION_JSON_VALUE)
 @JsonInclude(JsonInclude.Include.NON_NULL)

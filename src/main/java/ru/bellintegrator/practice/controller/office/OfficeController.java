@@ -13,7 +13,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 /**
  * Контроллер для управления информацией об офисах
  */
-
 @RestController
 @RequestMapping(value = "api/office", produces = APPLICATION_JSON_VALUE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
