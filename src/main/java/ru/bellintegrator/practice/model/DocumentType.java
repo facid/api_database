@@ -31,10 +31,10 @@ public class DocumentType {
     private Integer version;
 
     @Column(name = "name", length = 50)
-    private String name;
+    private String docName;
 
     @Column(name = "code", length = 2)
-    private String code;
+    private String docCode;
 
 
     @OneToMany(mappedBy = "docType", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -47,29 +47,35 @@ public class DocumentType {
 
     }
 
-    public DocumentType(String name, String code){
-        this.name = name;
-        this.code = code;
+    /**
+     * Конструктор для обновления и сохранения docData
+     *
+     * @param docName
+     * @param docCode
+     */
+    public DocumentType(String docName, String docCode){
+        this.docName = docName;
+        this.docCode = docCode;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getDocName() {
+        return docName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDocName(String name) {
+        this.docName = name;
     }
 
-    public String getCode() {
-        return code;
+    public String getDocCode() {
+        return docCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setDocCode(String code) {
+        this.docCode = code;
     }
 
     /**
@@ -102,5 +108,10 @@ public class DocumentType {
     public void removeDocData(DocumentData docData){
         getDocumentData().remove(docData);
         docData.setDocType(null);
+    }
+
+    @Override
+    public String toString(){
+        return "{id:" + id + ";name:" + docName + ";code:" + docCode + "}";
     }
 }

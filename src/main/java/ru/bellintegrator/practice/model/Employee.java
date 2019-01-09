@@ -1,17 +1,6 @@
 package ru.bellintegrator.practice.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 /**
  * Работник
@@ -43,11 +32,11 @@ public class Employee {
     @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
 
+    @Column(name = "middle_name", length = 50)
+    private String middleName;
+
     @Column(name = "second_name", length = 50)
     private String secondName;
-
-    @Column(name = "last_name", length = 50)
-    private String lastName;
 
     @Column(name = "position", length = 50, nullable = false)
     private String position;
@@ -67,7 +56,7 @@ public class Employee {
     @JoinColumn(name = "doc_data_id")
     private DocumentData docData;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
     private Country country;
 
@@ -78,43 +67,69 @@ public class Employee {
 
     }
 
-    public Employee(Long id, Long officeId, Long docDataId, Long countryId, String firstName,
-                    String secondName, String lastName, String position, String phone, Boolean isIdentified){
+    /**
+     * Конструктор для update()
+     */
+    public Employee(Long id, Long officeId, String firstName, String middleName,
+                    String secondName, String position, String phone, Boolean isIdentified){
         this.id = id;
         this.officeId = officeId;
-        this.docDataId = docDataId;
-        this.countryId = countryId;
         this.firstName = firstName;
+        this.middleName = middleName;
         this.secondName = secondName;
-        this.lastName = lastName;
         this.position = position;
         this.phone = phone;
         this.isIdentified = isIdentified;
     }
 
-    public Employee(Long officeId, Long docDataId, Long countryId, String firstName,
-                    String secondName, String lastName, String position, String phone, Boolean isIdentified){
+    /**
+     * Конструктор для save()
+     */
+    public Employee(Long officeId, String firstName, String middleName,
+                    String secondName, String position, String phone, Boolean isIdentified){
         this.officeId = officeId;
-        this.docDataId = docDataId;
-        this.countryId = countryId;
         this.firstName = firstName;
+        this.middleName = middleName;
         this.secondName = secondName;
-        this.lastName = lastName;
         this.position = position;
         this.phone = phone;
         this.isIdentified = isIdentified;
     }
 
-    public Employee(Long id, String firstName, String secondName, String lastName, String position){
+    /**
+     * Конструктор для filter()
+     */
+    public Employee(Long id, String firstName, String middleName, String secondName, String position, Boolean isIdentified){
         this.id = id;
         this.firstName = firstName;
+        this.middleName = middleName;
         this.secondName = secondName;
-        this.lastName = lastName;
         this.position = position;
+        this.isIdentified = isIdentified;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id){
+        this.id = id;
+    }
+
+    public Long getOfficeId(){
+        return officeId;
+    }
+
+    public void setOfficeId(Long officeId){
+        this.officeId = officeId;
+    }
+
+    public Long getDocDataId(){
+        return docDataId;
+    }
+
+    public Long getCountryId(){
+        return countryId;
     }
 
     public String getFirstName() {
@@ -133,12 +148,12 @@ public class Employee {
         this.secondName = secondName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setMiddleName(String lastName) {
+        this.middleName = lastName;
     }
 
     public String getPosition() {
@@ -221,8 +236,8 @@ public class Employee {
 
     @Override
     public String toString(){
-        return "{id:" + id + ";officeId:" + officeId + ";docDataId:" + docDataId + ";countryId:" + countryId
-                + ";firstName:" + firstName + ";secondName:" + secondName + ";lastName:" + lastName
-                + ";position:" + position + ";phone:" + phone + ";isIdentified:" + isIdentified + "}";
+        return "{id:" + id + ";officeId:" + officeId + ";firstName:" + firstName +
+                ";secondName:" + secondName + ";middleName:" + middleName +
+                ";position:" + position + ";phone:" + phone + ";isIdentified:" + isIdentified + "}";
     }
 }

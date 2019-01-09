@@ -1,31 +1,34 @@
 package ru.bellintegrator.practice.view;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Гражданство
  */
 
 public class CountryView {
-
     /**
      * Уникальный идентификатор
      */
-    @NotEmpty
+    @JsonIgnore
+    @NotNull(message = "id can not be null")
     public Long id;
 
     /**
      * Название
      */
-    public String name;
+    @Size(max = 50)
+    @NotEmpty(message = "citizenshipName can not be null")
+    public String citizenshipName;
 
     /**
      * Код
      */
-    public String code;
-
-    @Override
-    public String toString(){
-        return "{id:" + id + ";name:" + name + ";code:" + code +"}";
-    }
+    @Size(max = 3)
+    @NotEmpty(message = "citizenshipCode can not be null")
+    public String citizenshipCode;
 }

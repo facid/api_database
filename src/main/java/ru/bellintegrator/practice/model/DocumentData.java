@@ -1,18 +1,7 @@
 package ru.bellintegrator.practice.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Version;
-import java.time.LocalDate;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Данные документа
@@ -38,14 +27,15 @@ public class DocumentData {
     @Column(name = "doc_number", length = 10)
     private String docNumber;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "doc_date")
+    @Temporal(TemporalType.DATE)
+    private Date docDate;
 
 
     @OneToOne(mappedBy = "docData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Employee employee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "doc_type_id")
     private DocumentType docType;
 
@@ -56,11 +46,15 @@ public class DocumentData {
 
     }
 
-    public DocumentData(Long id, Long docTypeId, String docNumber, LocalDate date){
-        this.id = id;
-        this.docTypeId = docTypeId;
+    /**
+     * Конструктор для обновления и сохранения employee
+     *
+     * @param docNumber
+     * @param docDate
+     */
+    public DocumentData(String docNumber, Date docDate){
         this.docNumber = docNumber;
-        this.date = date;
+        this.docDate = docDate;
     }
 
     public Long getId() {
@@ -79,12 +73,12 @@ public class DocumentData {
         this.docNumber = docNumber;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Date getDocDate() {
+        return docDate;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDocDate(Date docDate) {
+        this.docDate = docDate;
     }
 
     /**
@@ -121,5 +115,10 @@ public class DocumentData {
      */
     public void setDocType(DocumentType docType){
         this.docType = docType;
+    }
+
+    @Override
+    public String toString(){
+        return "{id:" + id + ";docNumber:" + docNumber + ";date:" + docDate + "}";
     }
 }

@@ -1,31 +1,34 @@
 package ru.bellintegrator.practice.view;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Тип документа
  */
 
 public class DocumentTypeView {
-
     /**
      * Уникальный идентификатор
      */
-    @NotEmpty
+    @JsonIgnore
+    @NotNull
     public Long id;
 
     /**
      * Название
      */
-    public String name;
+    @Size(max = 50)
+    @NotEmpty(message = "docName can not be null")
+    public String docName;
 
     /**
      * Код
      */
-    public String code;
-
-    @Override
-    public String toString(){
-        return "{id:" + id + ";name:" + name + ";code:" + code +"}";
-    }
+    @Size(max = 2)
+    @NotEmpty(message = "docCode can not be null")
+    public String docCode;
 }

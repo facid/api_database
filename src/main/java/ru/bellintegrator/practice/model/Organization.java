@@ -22,7 +22,6 @@ public class Organization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id")
     private Long id;
 
     /**
@@ -63,6 +62,9 @@ public class Organization {
 
     }
 
+    /**
+     * Конструктор для update()
+     */
     public Organization(Long id, String name, String fullName, String address,
                         String phone, String inn, String kpp, Boolean isActive){
         this.id = id;
@@ -75,6 +77,9 @@ public class Organization {
         this.isActive = isActive;
     }
 
+    /**
+     * Конструктор для save()
+     */
     public Organization(String name, String fullName, String address, String phone,
                         String inn, String kpp, Boolean isActive){
         this.name = name;
@@ -86,6 +91,9 @@ public class Organization {
         this.isActive = isActive;
     }
 
+    /**
+     * Конструктор для filter()
+     */
     public Organization(Long id, String name, Boolean isActive){
         this.id = id;
         this.name = name;
@@ -93,8 +101,12 @@ public class Organization {
     }
 
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id){
+        this.id = id;
     }
 
     public String getName() {
@@ -192,8 +204,7 @@ public class Organization {
      */
     @Override
     public String toString(){
-        return "{id:" + id + ";name:" + name + ";full_name:" + fullName
-                + ";address:" + address + ";phone:" + phone + ";inn:"
-                + inn + ";kpp:" + kpp + ";is_active:" + isActive + "}";
+        return "{id:" + id + ";name:" + name + ";full_name:" + fullName + ";address:" + address
+                + ";phone:" + phone + ";inn:" + inn + ";kpp:" + kpp + ";is_active:" + isActive + "}";
     }
 }

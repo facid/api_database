@@ -63,6 +63,9 @@ public class Office {
 
     }
 
+    /**
+     * Конструктор для update()
+     */
     public Office(Long id, String name, String phone, String address, Boolean isActive){
         this.id = id;
         this.name = name;
@@ -71,13 +74,21 @@ public class Office {
         this.isActive = isActive;
     }
 
-    public Office(String name, String phone, String address, Boolean isActive){
+    /**
+     * Конструктор для save()
+     */
+    public Office(Long id, Long orgId, String name, String phone, String address, Boolean isActive){
+        this.id = id;
+        this.orgId = orgId;
         this.name = name;
         this.phone = phone;
         this.address = address;
         this.isActive = isActive;
     }
 
+    /**
+     * Конструктор для filter()
+     */
     public Office(Long id, String name, Boolean isActive){
         this.id = id;
         this.name = name;
@@ -88,11 +99,15 @@ public class Office {
         return id;
     }
 
+    public void setId(Long id){
+        this.id = id;
+    }
+
     public Long getOrgId() {
         return orgId;
     }
 
-    public void setOrgId(Long orgId) {
+    public void setOrgId(Long orgId){
         this.orgId = orgId;
     }
 
@@ -180,7 +195,7 @@ public class Office {
 
     @Override
     public String toString(){
-        return "{id:" + id + ";orgId" + orgId + ";name:" + name
-                + ";address:" + address + ";phone:" + phone + ";is_active:" + isActive + "}";
+        return "{id:" + id + ";orgId:" + orgId + ";name:" + name + ";address:" +
+                address + ";phone:" + phone + ";is_active:" + isActive + "}";
     }
 }

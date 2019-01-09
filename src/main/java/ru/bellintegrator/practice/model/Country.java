@@ -31,10 +31,10 @@ public class Country {
     private Integer version;
 
     @Column(name = "name", length = 50)
-    private String name;
+    private String citizenshipName;
 
     @Column(name = "code", length = 2)
-    private String code;
+    private String citizenshipCode;
 
 
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -47,29 +47,33 @@ public class Country {
 
     }
 
-    public Country(String name, String code){
-        this.name = name;
-        this.code = code;
+    /**
+     * Конструктор для сохранения employee
+     *
+     * @param citizenshipCode
+     */
+    public Country(String citizenshipCode){
+        this.citizenshipCode = citizenshipCode;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getCitizenshipName() {
+        return citizenshipName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCitizenshipName(String citizenshipName) {
+        this.citizenshipName = citizenshipName;
     }
 
-    public String getCode() {
-        return code;
+    public String getCitizenshipCode() {
+        return citizenshipCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCitizenshipCode(String citizenshipCode) {
+        this.citizenshipCode = citizenshipCode;
     }
 
     /**
@@ -102,5 +106,10 @@ public class Country {
     public void removeEmployee(Employee employee){
         getEmployees().remove(employee);
         employee.setCountry(null);
+    }
+
+    @Override
+    public String toString(){
+        return "{id:" + id + ";name:" + citizenshipName + ";code:" + citizenshipCode + "}";
     }
 }
