@@ -35,7 +35,6 @@ public class OfficeServiceTest {
     @Test
     public void testFilter(){
         Long orgId = 1L;
-        String testName = "Деловой центр";
         String phone = null;
         Boolean isActive = true;
 
@@ -46,7 +45,7 @@ public class OfficeServiceTest {
         Office office = new Office(id, name, isActive);
         expected.add(office);
 
-        List<Office> actual = dao.filter(orgId, testName, phone, isActive);
+        List<Office> actual = dao.filter(orgId, name, phone, isActive);
 
         List<OfficeView> expectedView = mapperFacade.mapAsList(expected, OfficeView.class);
         List<OfficeView> actualView = mapperFacade.mapAsList(actual, OfficeView.class);
@@ -77,7 +76,7 @@ public class OfficeServiceTest {
         view.id = 1L;
         view.name = "Деловой центр";
         view.phone = null;
-        view.address = "Краснопресненская наб., 14, стр. 1";
+        view.address = "Краснопресненская наб., 14, стр. 2";
         view.isActive = true;
 
         Office office = new Office(view.id, view.name, view.phone, view.address, view.isActive);
@@ -93,7 +92,7 @@ public class OfficeServiceTest {
         view.address = "Краснопресненская наб., 14, стр. 1";
         view.isActive = true;
 
-        Office office = new Office(view.name, view.phone, view.address, view.isActive);
+        Office office = new Office(view.id, view.orgId, view.name, view.phone, view.address, view.isActive);
 
         dao.save(office);
     }

@@ -34,18 +34,17 @@ public class OrganizationServiceTest {
 
     @Test
     public void testFilter(){
-        String testName = "Сбербанк";
+        String name = "Сбербанк";
         String inn = null;
         Boolean isActive = true;
 
         Long id = 2L;
-        String name = "Сбербанк";
 
         List<Organization> expected = new ArrayList<>();
         Organization organization = new Organization(id, name, isActive);
         expected.add(organization);
 
-        List<Organization> actual = dao.filter(testName, inn, isActive);
+        List<Organization> actual = dao.filter(name, inn, isActive);
 
         List<OrganizationView> viewExpected = mapperFacade.mapAsList(expected, OrganizationView.class);
         List<OrganizationView> viewActual = mapperFacade.mapAsList(actual, OrganizationView.class);
