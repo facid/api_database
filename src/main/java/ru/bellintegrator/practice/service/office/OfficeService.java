@@ -1,6 +1,5 @@
 package ru.bellintegrator.practice.service.office;
 
-import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import ru.bellintegrator.practice.view.OfficeView;
 
@@ -22,7 +21,7 @@ public interface OfficeService {
      * @param isActive - активность
      * @return возвращает список из id, name, isActive(true)
      */
-    List<OfficeView> filter(Long orgId, @Nullable String name, @Nullable String phone, @Nullable Boolean isActive);
+    List<OfficeView> filter(Long orgId, String name, String phone, Boolean isActive);
 
     /**
      * Получить данные офиса по id

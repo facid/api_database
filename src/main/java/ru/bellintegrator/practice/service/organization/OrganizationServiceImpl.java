@@ -3,7 +3,6 @@ package ru.bellintegrator.practice.service.organization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.practice.dao.organization.OrganizationDao;
@@ -38,7 +37,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     @Transactional
-    public List<OrganizationView> filter(String name, @Nullable String inn, @Nullable Boolean isActive){
+    public List<OrganizationView> filter(String name, String inn, Boolean isActive){
         logger.info("service - before dao.filter()");
 
         List<Organization> organizations = dao.filter(name, inn, isActive);
@@ -73,17 +72,13 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Transactional
     public void update(OrganizationView view){
-        Organization organization = new Organization(
-                view.id, view.name, view.fullName, view.address,
-                view.phone, view.inn, view.kpp, view.isActive
-        );
+        Organization organization = mapperFacade.map(view, Organization.class);
 
-
-        logger.info("service - before dao.update(): ");
+        logger.info("service - before dao.update()");
 
         dao.update(organization);
 
-        logger.info("service - after dao.update(): " + organization.toString());
+        logger.info("service - after dao.update()");
     }
 
     /**
@@ -94,15 +89,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Transactional
     public void save(OrganizationView view){
-        Organization organization = new Organization(
-                view.name, view.fullName, view.address,
-                view.phone, view.inn, view.kpp, view.isActive
-        );
+        Organization organization = mapperFacade.map(view, Organization.class);
 
-        logger.info("service - before dao.save()");
+        logger.info("service - before dao.save()" + organization.toString());
 
         dao.save(organization);
 
-        logger.info("service - after dao.save(): " + organization.toString());
+        logger.info("service - after dao.save():");
     }
 }

@@ -1,6 +1,5 @@
 package ru.bellintegrator.practice.service.organization;
 
-import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import ru.bellintegrator.practice.view.OrganizationView;
 
@@ -19,7 +18,7 @@ public interface OrganizationService {
      * @param name
      * @return возвращает список из id, name, isActive(true)
      */
-    List<OrganizationView> filter(String name, @Nullable String inn, @Nullable Boolean isActive);
+    List<OrganizationView> filter(String name, String inn, Boolean isActive);
 
     /**
      * Получить данные организации по id

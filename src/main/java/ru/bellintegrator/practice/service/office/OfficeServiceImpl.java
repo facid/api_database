@@ -3,7 +3,6 @@ package ru.bellintegrator.practice.service.office;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.practice.dao.office.OfficeDao;
@@ -41,10 +40,12 @@ public class OfficeServiceImpl implements OfficeService {
      */
     @Override
     @Transactional
-    public List<OfficeView> filter(Long orgId, @Nullable String name, @Nullable String phone, @Nullable Boolean isActive){
+    public List<OfficeView> filter(Long orgId, String name, String phone, Boolean isActive){
+        logger.info("service - before dao.filter()");
 
         List<Office> offices = dao.filter(orgId, name, phone, isActive);
 
+        logger.info("service - after dao.filter()" + offices);
         return mapperFacade.mapAsList(offices, OfficeView.class);
     }
 
@@ -73,17 +74,13 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     @Transactional
     public void update(OfficeView view){
-        Office office = new Office(
-                view.id, view.name, view.phone,
-                view.address, view.isActive
-        );
+        Office office = mapperFacade.map(view, Office.class);
 
-        logger.info("service - before dao.update()");
+        logger.info("service - before dao.update(): ");
 
         dao.update(office);
 
-        logger.info("service - after dao.update()" + office.toString());
-
+        logger.info("service - after dao.update()");
     }
 
     /**
@@ -94,12 +91,12 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     @Transactional
     public void save(OfficeView view){
-        Office office = new Office(view.name, view.address, view.phone, view.isActive);
+        Office office = mapperFacade.map(view, Office.class);
 
-        logger.info("service - before dao.save()");
+        logger.info("service - before dao.save(): " + office.toString());
 
         dao.save(office);
 
-        logger.info("service - after dao.save()" + office.toString());
+        logger.info("service - after dao.save():");
     }
 }
