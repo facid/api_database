@@ -35,7 +35,7 @@ public class CountryDaoImpl implements CountryDao {
         CriteriaQuery<Country> criteria = builder.createQuery(Country.class);
         Root<Country> root = criteria.from(Country.class);
 
-        criteria.multiselect(root.get("name"), root.get("code"));
+        criteria.multiselect(root.get("citizenshipName"), root.get("citizenshipCode"));
 
         TypedQuery<Country> query = em.createQuery(criteria);
         return query.getResultList();

@@ -2,9 +2,15 @@ package ru.bellintegrator.practice.controller.employee;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.practice.service.employee.EmployeeService;
 import ru.bellintegrator.practice.view.EmployeeView;
+import ru.bellintegrator.practice.view.ResponseView;
 
 import java.util.List;
 
@@ -18,7 +24,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "api/user", produces = APPLICATION_JSON_VALUE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmployeeController {
-
     private final EmployeeService employeeService;
 
     @Autowired
@@ -54,8 +59,9 @@ public class EmployeeController {
      * @param employee
      */
     @PostMapping("/update")
-    public void update(@RequestBody EmployeeView employee){
+    public ResponseView update(@RequestBody EmployeeView employee){
         employeeService.update(employee);
+        return new ResponseView();
     }
 
     /**
@@ -64,7 +70,8 @@ public class EmployeeController {
      * @param employee
      */
     @PostMapping("/save")
-    public void save(@RequestBody EmployeeView employee){
+    public ResponseView save(@RequestBody EmployeeView employee){
         employeeService.save(employee);
+        return new ResponseView();
     }
 }

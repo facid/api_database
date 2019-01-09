@@ -1,6 +1,5 @@
 package ru.bellintegrator.practice.dao.organization;
 
-import org.springframework.lang.Nullable;
 import ru.bellintegrator.practice.model.Organization;
 
 import java.util.List;
@@ -14,10 +13,12 @@ public interface OrganizationDao {
     /**
      * Отфильтровать организации по заданным параметрам
      *
-     * @param name
+     * @param name - название
+     * @param inn - ИНН
+     * @param isActive - активность
      * @return возвращает список из id, name, isActive(true)
      */
-    List<Organization> filter(String name, @Nullable String inn, @Nullable Boolean isActive);
+    List<Organization> filter(String name, String inn, Boolean isActive);
 
     /**
      * Получить данные организации по id

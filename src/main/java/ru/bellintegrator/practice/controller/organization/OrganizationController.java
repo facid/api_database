@@ -2,9 +2,15 @@ package ru.bellintegrator.practice.controller.organization;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.practice.service.organization.OrganizationService;
 import ru.bellintegrator.practice.view.OrganizationView;
+import ru.bellintegrator.practice.view.ResponseView;
 
 import java.util.List;
 
@@ -18,7 +24,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "api/organization", produces = APPLICATION_JSON_VALUE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrganizationController {
-
     private final OrganizationService organizationService;
 
     @Autowired
@@ -54,8 +59,9 @@ public class OrganizationController {
      * @param organization
      */
     @PostMapping("/update")
-    public void update(@RequestBody OrganizationView organization){
+    public ResponseView update(@RequestBody OrganizationView organization){
         organizationService.update(organization);
+        return new ResponseView();
     }
 
     /**
@@ -64,7 +70,8 @@ public class OrganizationController {
      * @param organization
      */
     @PostMapping("/save")
-    public void save(@RequestBody OrganizationView organization){
+    public ResponseView save(@RequestBody OrganizationView organization){
         organizationService.save(organization);
+        return new ResponseView();
     }
 }

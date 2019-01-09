@@ -1,8 +1,9 @@
 package ru.bellintegrator.practice.dao.organization;
 
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import ru.bellintegrator.practice.model.Organization;
 
@@ -20,6 +21,8 @@ import java.util.NoSuchElementException;
 
 @Repository
 public class OrganizationDaoImpl implements OrganizationDao {
+    Logger log = LoggerFactory.getLogger(OrganizationDaoImpl.class);
+
     private final EntityManager em;
 
     @Autowired
@@ -30,11 +33,13 @@ public class OrganizationDaoImpl implements OrganizationDao {
     /**
      * Отфильтровать организации по заданным параметрам
      *
-     * @param name
+     * @param name - название
+     * @param inn - ИНН
+     * @param isActive - активность
      * @return возвращает список из id, name, isActive(true) организации
      */
     @Override
-    public List<Organization> filter(String name, @Nullable String inn, @Nullable Boolean isActive){
+    public List<Organization> filter(String name, String inn, Boolean isActive){
         if (Strings.isNullOrEmpty(name)){
             throw new IllegalArgumentException("name can not be null");
         }
@@ -48,20 +53,27 @@ public class OrganizationDaoImpl implements OrganizationDao {
         Root<Organization> root = criteria.from(Organization.class);
 
         criteria.multiselect(root.get("id"), root.get("name"), root.get("isActive"));
-        criteria.where(
-                builder.equal(root.get("name"), name),
-                builder.equal(root.get("isActive"), isActive)
-        );
 
         if (!Strings.isNullOrEmpty(inn)){
             criteria.where(
-                    builder.equal(root.get("inn"), inn)
+                    builder.equal(root.get("name"), name),
+                    builder.equal(root.get("inn"), inn),
+                    builder.equal(root.get("isActive"), isActive)
+            );
+        } else {
+            criteria.where(
+                    builder.equal(root.get("name"), name),
+                    builder.equal(root.get("isActive"), isActive)
             );
         }
 
         TypedQuery<Organization> query = em.createQuery(criteria);
+        List<Organization> result = query.getResultList();
+        if (result.isEmpty()){
+            throw new NoSuchElementException("Organization not found or invalid data entered");
+        }
 
-        return query.getResultList();
+        return result;
     }
 
     /**
@@ -75,7 +87,13 @@ public class OrganizationDaoImpl implements OrganizationDao {
         if (id == null){
             throw new IllegalArgumentException("id can not be null");
         }
-        return em.find(Organization.class,id);
+
+        Organization organization = em.find(Organization.class, id);
+        if (organization == null){
+            throw new NoSuchElementException("id incorrect, no such record exists");
+        }
+
+        return organization;
     }
 
     /**
@@ -85,24 +103,46 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public void update(Organization organization){
-        Long id = organization.getId();
-
-        CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Long> query = builder.createQuery(Long.class);
-        Root<Organization> orgRoot = query.from(Organization.class);
-
-        query.select(builder.count(orgRoot));
-        query.where(
-                builder.equal(orgRoot.get("id"), id)
-        );
-
-        Long count = em.createQuery(query).getSingleResult();
-
-        if (count == 0){
-            throw new NoSuchElementException("no such record exists");
+        if (
+                Strings.isNullOrEmpty(organization.getName()) ||
+                Strings.isNullOrEmpty(organization.getFullName()) ||
+                Strings.isNullOrEmpty(organization.getInn()) ||
+                Strings.isNullOrEmpty(organization.getKpp()) ||
+                Strings.isNullOrEmpty(organization.getAddress())
+        ){
+            throw new IllegalArgumentException("name, fullName, inn, kpp, address can not be null");
         }
 
-        em.merge(organization);
+        try {
+            long testInn = Long.parseLong(organization.getInn());
+            long testKpp = Long.parseLong(organization.getKpp());
+
+        } catch (NumberFormatException e){
+            log.warn("inn or kpp incorrect" + e);
+            throw e;
+        }
+
+        Organization updateOrganization = getById(organization.getId());
+
+        log.info("dao - organization before update: " + updateOrganization.toString());
+
+        updateOrganization.setName(organization.getName());
+        updateOrganization.setFullName(organization.getFullName());
+        updateOrganization.setInn(organization.getInn());
+        updateOrganization.setKpp(organization.getKpp());
+        updateOrganization.setAddress(organization.getAddress());
+
+        if (!Strings.isNullOrEmpty(organization.getPhone())) {
+            updateOrganization.setPhone(organization.getPhone());
+        }
+
+        if (organization.getIsActive() != null) {
+            updateOrganization.setIsActive(organization.getIsActive());
+        }
+
+        log.info("dao - organization after update: " + updateOrganization.toString());
+
+        em.merge(updateOrganization);
     }
 
     /**
@@ -112,8 +152,23 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public void save(Organization organization){
-        if (organization == null){
-            throw new IllegalArgumentException("organization can not be null");
+        if (
+                Strings.isNullOrEmpty(organization.getName()) ||
+                Strings.isNullOrEmpty(organization.getFullName()) ||
+                Strings.isNullOrEmpty(organization.getInn()) ||
+                Strings.isNullOrEmpty(organization.getKpp()) ||
+                Strings.isNullOrEmpty(organization.getAddress())
+        ){
+            throw new IllegalArgumentException("name, fullName, inn, kpp, address can not be null");
+        }
+
+        try {
+            long testInn = Long.parseLong(organization.getInn());
+            long testKpp = Long.parseLong(organization.getKpp());
+
+        } catch (NumberFormatException e){
+            log.warn("inn or kpp incorrect" + e);
+            throw e;
         }
 
         em.persist(organization);

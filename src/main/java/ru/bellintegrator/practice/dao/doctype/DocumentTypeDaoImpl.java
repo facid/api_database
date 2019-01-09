@@ -35,7 +35,7 @@ public class DocumentTypeDaoImpl implements DocumentTypeDao {
         CriteriaQuery<DocumentType> criteria = builder.createQuery(DocumentType.class);
         Root<DocumentType> root = criteria.from(DocumentType.class);
 
-        criteria.multiselect(root.get("name"), root.get("code"));
+        criteria.multiselect(root.get("docName"), root.get("docCode"));
 
         TypedQuery<DocumentType> query = em.createQuery(criteria);
         return query.getResultList();

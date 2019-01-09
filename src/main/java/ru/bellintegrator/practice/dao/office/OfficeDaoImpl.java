@@ -1,11 +1,11 @@
 package ru.bellintegrator.practice.dao.office;
 
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import ru.bellintegrator.practice.model.Office;
-import ru.bellintegrator.practice.model.Organization;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,6 +23,8 @@ import java.util.NoSuchElementException;
 
 @Repository
 public class OfficeDaoImpl implements OfficeDao {
+    Logger log = LoggerFactory.getLogger(OfficeDaoImpl.class);
+
     private final EntityManager em;
 
     @Autowired
@@ -39,8 +42,7 @@ public class OfficeDaoImpl implements OfficeDao {
      * @return возвращает список из id, name, isActive(true)
      */
     @Override
-    public List<Office> filter(Long orgId, @Nullable String name, @Nullable String phone, @Nullable Boolean isActive){
-
+    public List<Office> filter(Long orgId, String name, String phone, Boolean isActive){
         if (orgId == null){
             throw new IllegalArgumentException("orgId can not be null");
         }
@@ -51,40 +53,38 @@ public class OfficeDaoImpl implements OfficeDao {
 
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Office> criteria = builder.createQuery(Office.class);
-        Root<Organization> organizationRoot = criteria.from(Organization.class);
         Root<Office> officeRoot = criteria.from(Office.class);
 
-        Predicate join = builder.equal(officeRoot.get("orgId"), organizationRoot.get("id"));
-        Predicate id = builder.equal(officeRoot.get("orgId"), orgId);
-
-        criteria.multiselect(officeRoot.get("id"), officeRoot.get("name"), officeRoot.get("isActive"));
-        criteria.where(
-                builder.and(join, id),
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(
+                builder.equal(officeRoot.get("orgId"), orgId)
+        );
+        predicates.add(
                 builder.equal(officeRoot.get("isActive"), isActive)
         );
 
         if (!Strings.isNullOrEmpty(name)){
-            criteria.where(
+            predicates.add(
                     builder.equal(officeRoot.get("name"), name)
             );
         }
 
         if (!Strings.isNullOrEmpty(phone)){
-            criteria.where(
+            predicates.add(
                     builder.equal(officeRoot.get("phone"), phone)
             );
         }
 
-        if ((!Strings.isNullOrEmpty(name)) & (!Strings.isNullOrEmpty(phone))){
-            criteria.where(
-                    builder.equal(officeRoot.get("name"), name),
-                    builder.equal(officeRoot.get("phone"), phone)
-            );
-        }
+        criteria.multiselect(officeRoot.get("id"), officeRoot.get("name"), officeRoot.get("isActive"));
+        criteria.where(predicates.toArray(new Predicate[predicates.size()]));
 
         TypedQuery<Office> query = em.createQuery(criteria);
+        List<Office> result = query.getResultList();
+        if (result.isEmpty()){
+            throw new NoSuchElementException("Offices not found or invalid data entered");
+        }
 
-        return query.getResultList();
+        return result;
     }
 
     /**
@@ -98,7 +98,13 @@ public class OfficeDaoImpl implements OfficeDao {
         if (id == null){
             throw new IllegalArgumentException("id can not be null");
         }
-        return em.find(Office.class,id);
+
+        Office office = em.find(Office.class, id);
+        if (office == null){
+            throw new NoSuchElementException("id incorrect, no such record exists");
+        }
+
+        return office;
     }
 
     /**
@@ -108,24 +114,28 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public void update(Office office){
-        Long id = office.getId();
-
-        CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Long> query = builder.createQuery(Long.class);
-        Root<Office> officeRoot = query.from(Office.class);
-
-        query.select(builder.count(officeRoot));
-        query.where(
-                builder.equal(officeRoot.get("id"), id)
-        );
-
-        Long count = em.createQuery(query).getSingleResult();
-
-        if (count == 0){
-            throw new NoSuchElementException("no such record exists");
+        if (Strings.isNullOrEmpty(office.getName()) || Strings.isNullOrEmpty(office.getAddress())){
+            throw new IllegalArgumentException("name, address can not be null");
         }
 
-        em.merge(office);
+        Office updateOffice = getById(office.getId());
+
+        log.info("dao - office before update: " + updateOffice.toString());
+
+        updateOffice.setName(office.getName());
+        updateOffice.setAddress(office.getAddress());
+
+        if (!Strings.isNullOrEmpty(office.getPhone())) {
+            updateOffice.setPhone(office.getPhone());
+        }
+
+        if (office.getIsActive() != null) {
+            updateOffice.setIsActive(office.getIsActive());
+        }
+
+        log.info("dao - office after update: " + updateOffice.toString());
+
+        em.merge(updateOffice);
     }
 
     /**
@@ -135,8 +145,8 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public void save(Office office){
-        if (office == null){
-            throw new IllegalArgumentException("organization can not be null");
+        if (office.getOrgId() == null){
+            throw new IllegalArgumentException("orgId can not be null");
         }
 
         em.persist(office);

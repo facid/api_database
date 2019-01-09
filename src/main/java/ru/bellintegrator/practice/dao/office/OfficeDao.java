@@ -1,6 +1,5 @@
 package ru.bellintegrator.practice.dao.office;
 
-import org.springframework.lang.Nullable;
 import ru.bellintegrator.practice.model.Office;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public interface OfficeDao {
      * @param isActive - активность
      * @return возвращает список из id, name, isActive(true)
      */
-    List<Office> filter(Long orgId, @Nullable String name, @Nullable String phone, @Nullable Boolean isActive);
+    List<Office> filter(Long orgId, String name, String phone, Boolean isActive);
 
     /**
      * Получить данные офиса по id
