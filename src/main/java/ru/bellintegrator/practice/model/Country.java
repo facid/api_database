@@ -48,6 +48,17 @@ public class Country {
     }
 
     /**
+     * Конструктор для отображения всех стран
+     *
+     * @param citizenshipName
+     * @param citizenshipCode
+     */
+    public Country(String citizenshipName, String citizenshipCode){
+        this.citizenshipName = citizenshipName;
+        this.citizenshipCode = citizenshipCode;
+    }
+
+    /**
      * Конструктор для сохранения employee
      *
      * @param citizenshipCode
