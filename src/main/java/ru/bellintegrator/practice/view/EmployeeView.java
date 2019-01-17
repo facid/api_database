@@ -94,10 +94,9 @@ public class EmployeeView {
     public String phone;
 
     /**
-     * Идентификация
+     * Объект связи Employee с DocumentData
      */
-    @NotEmpty(message = "isIdentified can not be null")
-    public Boolean isIdentified;
+    public DocumentDataView docData;
 
     /**
      * Объект связи Employee с Country
@@ -105,7 +104,8 @@ public class EmployeeView {
     public CountryView country;
 
     /**
-     * Объект связи Employee с DocumentData
+     * Идентификация
      */
-    public DocumentDataView docData;
+    @NotEmpty(message = "isIdentified can not be null")
+    public Boolean isIdentified;
 }

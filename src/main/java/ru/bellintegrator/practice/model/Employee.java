@@ -110,11 +110,11 @@ public class Employee {
     /**
      * Конструктор для filter()
      */
-    public Employee(Long id, String firstName, String middleName, String secondName, String position, Boolean isIdentified){
+    public Employee(Long id, String firstName, String secondName, String middleName, String position, Boolean isIdentified){
         this.id = id;
         this.firstName = firstName;
-        this.middleName = middleName;
         this.secondName = secondName;
+        this.middleName = middleName;
         this.position = position;
         this.isIdentified = isIdentified;
     }
@@ -163,8 +163,8 @@ public class Employee {
         return middleName;
     }
 
-    public void setMiddleName(String lastName) {
-        this.middleName = lastName;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
     public String getPosition() {
